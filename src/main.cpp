@@ -26,7 +26,7 @@ int main() {
     } */
 
     Menu mainMenu;
-    mainMenu.displayMainMenu();
+    mainMenu.displayMainMenu(airports);
 
     return 0;
 }

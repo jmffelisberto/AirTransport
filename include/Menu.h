@@ -2,16 +2,17 @@
 #define MENU_H
 
 #include <iostream>
+#include "Airport.h"
 
 class Menu {
 public:
 
-    void displayMainMenu();
-    void displayBestFlightMenu();
-    void displayBestFlightByCityMenu();
-    void displayBestFlightByAirportMenu();
-    void displayAirportInformationMenu();
-    void displayInvalidChoice();
+    void displayMainMenu(std::vector<Airport> airports);
+    void displayBestFlightMenu(std::vector<Airport> airports);
+    void displayBestFlightByCityMenu(std::vector<Airport> airports);
+    void displayBestFlightByAirportMenu(std::vector<Airport> airports);
+    void displayAirportInformationMenu(std::vector<Airport> airports);
+    void displayInvalidChoice(std::vector<Airport> airports);
 
 };
 

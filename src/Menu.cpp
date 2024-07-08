@@ -1,9 +1,12 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <vector>
 #include "Menu.h"
+#include "Graph.h"
+#include "Airport.h"
 
-void Menu::displayMainMenu() {
+void Menu::displayMainMenu(std::vector<Airport> airports) {
     int choice1;
     std::cout << "   _   _    _____                               _    " << std::endl;
     std::cout << "  /_\\ (_)_ |_   _| _ __ _ _ _  ____ __  ___ _ _| |_ " << std::endl;
@@ -20,7 +23,7 @@ void Menu::displayMainMenu() {
     switch (choice1)
     {
     case 1:
-        displayBestFlightMenu();
+        displayBestFlightMenu(airports);
         break;
 
     case 2:
@@ -33,12 +36,12 @@ void Menu::displayMainMenu() {
         return;
     
     default:
-        displayInvalidChoice();
+        displayInvalidChoice(airports);
         break;
     }
 }
 
-void Menu::displayBestFlightMenu() {
+void Menu::displayBestFlightMenu(std::vector<Airport> airports) {
     int choice2;
     std::cout << std::endl;
     std::cout << "Let's find you our bebst flight!" << std::endl; 
@@ -50,30 +53,49 @@ void Menu::displayBestFlightMenu() {
     switch (choice2)
     {
     case 1:
-        displayBestFlightByCityMenu();
+        displayBestFlightByCityMenu(airports);
         break;
     
     case 2:
-        displayBestFlightByAirportMenu();
+        displayBestFlightByAirportMenu(airports);
         break;
 
     default:
-        displayInvalidChoice();
+        displayInvalidChoice(airports);
         break;
     }
 }
 
-void Menu::displayBestFlightByCityMenu(){
+void Menu::displayBestFlightByCityMenu(std::vector<Airport> airports){
     std::string city1, city2;
     std::cout << "Enter the city you are departing from: ";
     std::cin >> city1;
     std::cout << "Enter the city you are going to: ";
     std::cin >> city2;
-    //TODO: Implement the search by city
-    std::cout << "Work in Progress..." << std::endl;
+    std::cout << "\n";
+    Graph graph;
+    std::vector<std::string> source_airports = graph.getCityAirports(airports, city1);
+    std::vector<std::string> target_airports = graph.getCityAirports(airports, city2);
+    std::cout << "Source Airports: ";
+    for (const auto &airport : source_airports) {
+        std::cout << airport << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Target Airports: ";
+    for (const auto &airport : target_airports) {
+        std::cout << airport << " ";
+    }
+    std::cout << std::endl;
+    /* std::vector<std::string> result = graph.getShortestPathAmongMultipleAirports(source_airports, target_airports);
+    std::cout << result.size() << std::endl;
+    std::cout << "Shortest path from " << city1 << " to " << city2 << ":\n";
+    for (const auto &airport : result) {
+        std::cout << airport << " ";
+    } */
 }
 
-void Menu::displayBestFlightByAirportMenu(){
+void Menu::displayBestFlightByAirportMenu(std::vector<Airport> airports){
     std::string airport1, airport2;
     std::cout << "Enter the airport you are departing from: ";
     std::cin >> airport1;
@@ -83,7 +105,7 @@ void Menu::displayBestFlightByAirportMenu(){
     std::cout << "Work in Progress..." << std::endl;
 }
 
-void Menu::displayInvalidChoice(){
+void Menu::displayInvalidChoice(std::vector<Airport> airports){
     std::cout << "Invalid choice. Please try again." << std::endl;
     std::cout << "Redirecting..." << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -91,6 +113,6 @@ void Menu::displayInvalidChoice(){
         std::cout << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
-    displayMainMenu();
+    displayMainMenu(airports);
 }
    

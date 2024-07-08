@@ -2,7 +2,8 @@
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
-#include <algorithm> // Include this header for std::reverse
+#include <algorithm> 
+#include "Airport.h"
 
 void Graph::addAirport(const std::string &code) {
     if (adjList.find(code) == adjList.end()) {
@@ -45,4 +46,31 @@ std::vector<std::string> Graph::getShortestPath(const std::string &start, const 
     }
 
     return {};
+}
+
+std::vector<std::string> Graph::getShortestPathAmongMultipleAirports(const std::vector<std::string> &startAirports, const std::vector<std::string> &endAirports) {
+    std::vector<std::string> shortestPath;
+    int minPathLength = 9999999;
+
+    for (const auto &start : startAirports) {
+        for (const auto &end : endAirports) {
+            std::vector<std::string> path = getShortestPath(start, end);
+            if (!path.empty() && path.size() < minPathLength) {
+                minPathLength = path.size();
+                shortestPath = path;
+            }
+        }
+    }
+
+    return shortestPath;
+}
+
+std::vector<std::string> Graph::getCityAirports(const std::vector<Airport> &airports, const std::string &city) {
+    std::vector<std::string> cityAirports;
+    for (const auto &airport : airports) {
+        if (airport.city == city) {
+            cityAirports.push_back(airport.code);
+        }
+    }
+    return cityAirports;
 }
