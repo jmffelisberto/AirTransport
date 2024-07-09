@@ -1,19 +1,18 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <iostream>
+#include <vector>
 #include "Airport.h"
+#include "Graph.h"
 
 class Menu {
 public:
-
-    void displayMainMenu(std::vector<Airport> airports);
-    void displayBestFlightMenu(std::vector<Airport> airports);
-    void displayBestFlightByCityMenu(std::vector<Airport> airports);
-    void displayBestFlightByAirportMenu(std::vector<Airport> airports);
-    void displayAirportInformationMenu(std::vector<Airport> airports);
-    void displayInvalidChoice(std::vector<Airport> airports);
-
+    void displayMainMenu(const std::vector<Airport> &airports, Graph &graph);
+    void displayBestFlightMenu(const std::vector<Airport> &airports, Graph &graph);
+    void displayBestFlightByCityMenu(const std::vector<Airport> &airports, Graph &graph);
+    void displayBestFlightByAirportMenu(const std::vector<Airport> &airports, Graph &graph);
+    void displayInvalidChoice(const std::vector<Airport> &airports, Graph &graph);
 };
+
 
 #endif // MENU_H

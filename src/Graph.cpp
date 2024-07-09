@@ -1,9 +1,9 @@
 #include "Graph.h"
+#include "Airport.h"
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
-#include <algorithm> 
-#include "Airport.h"
+#include <algorithm>
 
 void Graph::addAirport(const std::string &code) {
     if (adjList.find(code) == adjList.end()) {
