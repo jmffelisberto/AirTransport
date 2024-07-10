@@ -1,9 +1,10 @@
 #include "Reader.h"
 #include <fstream>
 #include <sstream>
+#include <unordered_map>
 
-std::vector<Airport> Reader::readAirports(const std::string &filePath) {
-    std::vector<Airport> airports;
+std::unordered_map<std::string, Airport> Reader::readAirports(const std::string &filePath) {
+    std::unordered_map<std::string, Airport> airports;
     std::ifstream file(filePath);
     std::string line, word;
 
@@ -15,15 +16,15 @@ std::vector<Airport> Reader::readAirports(const std::string &filePath) {
             while (std::getline(ss, word, ',')) {
                 row.push_back(word);
             }
-            airports.emplace_back(row[0], row[1], row[2], row[3], std::stod(row[4]), std::stod(row[5]));
+            airports[row[0]] = Airport(row[0], row[1], row[2], row[3], std::stod(row[4]), std::stod(row[5]));
         }
     }
 
     return airports;
 }
 
-std::vector<Airline> Reader::readAirlines(const std::string &filePath) {
-    std::vector<Airline> airlines;
+std::unordered_map<std::string, Airline> Reader::readAirlines(const std::string &filePath) {
+    std::unordered_map<std::string, Airline> airlines;
     std::ifstream file(filePath);
     std::string line, word;
 
@@ -35,7 +36,7 @@ std::vector<Airline> Reader::readAirlines(const std::string &filePath) {
             while (std::getline(ss, word, ',')) {
                 row.push_back(word);
             }
-            airlines.emplace_back(row[0], row[1], row[2], row[3]);
+            airlines[row[0]] = Airline(row[0], row[1], row[2], row[3]);
         }
     }
 

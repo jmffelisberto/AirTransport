@@ -7,15 +7,14 @@
 
 class Airport {
 public:
+    Airport() : code(""), name(""), city(""), country(""), latitude(0.0), longitude(0.0) {}
+    Airport(const std::string &code, const std::string &name, const std::string &city, const std::string &country, double latitude, double longitude);
     std::string code;
     std::string name;
     std::string city;
     std::string country;
     double latitude;
     double longitude;
-
-    Airport(const std::string &code, const std::string &name, const std::string &city, const std::string &country, double latitude, double longitude);
-    std::vector<std::string> getCityAirports(const std::vector<Airport> &airports, const std::string &city);
 };
 
 #endif // AIRPORT_H
