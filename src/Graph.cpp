@@ -7,15 +7,15 @@
 
 void Graph::addAirport(const std::string &code) {
     if (adjList.find(code) == adjList.end()) {
-        adjList[code] = std::vector<std::string>();
+        adjList[code] = std::vector<FlightInfo>();
     }
 }
 
-void Graph::addFlight(const std::string &source, const std::string &target) {
-    adjList[source].push_back(target);
+void Graph::addFlight(const std::string &source, const std::string &target, const std::string &airline) {
+    adjList[source].push_back({target, airline});
 }
 
-std::vector<std::string> Graph::getShortestPath(const std::string &start, const std::string &end) {
+std::vector<std::string> Graph::getShortestPath(const std::string &start, const std::string &end, const std::unordered_set<std::string> &airlines) {
     std::unordered_map<std::string, std::string> prev;
     std::queue<std::string> q;
     std::unordered_set<std::string> visited;
@@ -36,11 +36,13 @@ std::vector<std::string> Graph::getShortestPath(const std::string &start, const 
             return path;
         }
 
-        for (const auto &neighbor : adjList[airport]) {
-            if (visited.find(neighbor) == visited.end()) {
-                q.push(neighbor);
-                visited.insert(neighbor);
-                prev[neighbor] = airport;
+        for (const auto &flight : adjList[airport]) {
+            if (airlines.empty() || airlines.find(flight.airline) != airlines.end()) {
+                if (visited.find(flight.target) == visited.end()) {
+                    q.push(flight.target);
+                    visited.insert(flight.target);
+                    prev[flight.target] = airport;
+                }
             }
         }
     }
@@ -48,13 +50,13 @@ std::vector<std::string> Graph::getShortestPath(const std::string &start, const 
     return {};
 }
 
-std::vector<std::string> Graph::getShortestPathAmongMultipleAirports(const std::vector<std::string> &startAirports, const std::vector<std::string> &endAirports) {
+std::vector<std::string> Graph::getShortestPathAmongMultipleAirports(const std::vector<std::string> &source_airports, const std::vector<std::string> &target_airports, const std::unordered_set<std::string> &airlines) {
     std::vector<std::string> shortestPath;
-    int minPathLength = 9999999;
+    int minPathLength = 99999999;
 
-    for (const auto &start : startAirports) {
-        for (const auto &end : endAirports) {
-            std::vector<std::string> path = getShortestPath(start, end);
+    for (const auto &source : source_airports) {
+        for (const auto &target : target_airports) {
+            std::vector<std::string> path = getShortestPath(source, target, airlines);
             if (!path.empty() && path.size() < minPathLength) {
                 minPathLength = path.size();
                 shortestPath = path;

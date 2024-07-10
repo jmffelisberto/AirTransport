@@ -2,6 +2,7 @@
 #include <chrono>
 #include <thread>
 #include <vector>
+#include <unordered_set>
 #include "Menu.h"
 #include "Graph.h"
 #include "Airport.h"
@@ -59,6 +60,24 @@ void Menu::displayBestFlightMenu(const std::vector<Airport> &airports, Graph &gr
     }
 }
 
+std::unordered_set<std::string> Menu::getAirlinePreferences() {
+    std::unordered_set<std::string> airlines;
+    int choice;
+    std::string airline;
+
+    std::cout << "Do you want to specify preferred airlines? (1 for Yes, 0 for No): ";
+    std::cin >> choice;
+    if (choice == 1) {
+        std::cout << "Enter the airlines you prefer (enter DONE when finished):" << std::endl;
+        while (true) {
+            std::cin >> airline;
+            if (airline == "DONE") break;
+            airlines.insert(airline);
+        }
+    }
+    return airlines;
+}
+
 void Menu::displayBestFlightByCityMenu(const std::vector<Airport> &airports, Graph &graph) {
     std::string city1, city2;
     std::cout << "Enter the city you are departing from: ";
@@ -82,7 +101,9 @@ void Menu::displayBestFlightByCityMenu(const std::vector<Airport> &airports, Gra
     }
     std::cout << std::endl;
 
-    std::vector<std::string> result = graph.getShortestPathAmongMultipleAirports(source_airports, target_airports);
+    std::unordered_set<std::string> airlines = getAirlinePreferences();
+
+    std::vector<std::string> result = graph.getShortestPathAmongMultipleAirports(source_airports, target_airports, airlines);
 
     std::cout << "Result size: " << result.size() << std::endl;
 
@@ -104,7 +125,9 @@ void Menu::displayBestFlightByAirportMenu(const std::vector<Airport> &airports, 
     std::cout << "Enter the airport you are going to: ";
     std::cin >> airport2;
 
-    std::vector<std::string> result = graph.getShortestPath(airport1, airport2);
+    std::unordered_set<std::string> airlines = getAirlinePreferences();
+
+    std::vector<std::string> result = graph.getShortestPath(airport1, airport2, airlines);
 
     std::cout << "Shortest path from " << airport1 << " to " << airport2 << ":\n";
     for (const auto &airport : result) {
