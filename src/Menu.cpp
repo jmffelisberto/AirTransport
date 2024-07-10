@@ -46,6 +46,8 @@ void Menu::displayMainMenu(const std::unordered_map<std::string, Airport>& airpo
 
 void Menu::displayAirportInfoMenu(const std::unordered_map<std::string, Airport>& airports, Graph &graph, std::unordered_map<std::string, Airline> &airlines, const std::string& airport) {
     int choice17, numFlights;
+    std::string airport2;
+
     std::cout << "Airport selected: " << airport << std::endl;
     std::cout << "Now, please select the option that best represents what you want to know about the airport:\n" << std::endl;
     std::cout << "1. Airport ID (name, city, country...)" << std::endl;
@@ -54,7 +56,44 @@ void Menu::displayAirportInfoMenu(const std::unordered_map<std::string, Airport>
     std::cout << "4. Airport Coverage" << std::endl;
     std::cout << "5. Return to Main Menu\n" << std::endl;
     std::cout << "Your choice: ";
-    std::cin >> choice17;
+    
+    std::string input;
+    std::cin >> input;
+
+    // Validate if the input is a number
+    try {
+        choice17 = std::stoi(input);
+    } catch (std::invalid_argument const &e) {
+        std::cout << "Invalid choice. Please enter a number from 1 to 5." << std::endl;
+        std::cout << "Redirecting..." << std::endl;
+        for (int counter = 0; counter < 5; counter++) {
+            std::cout << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        }
+        displayAirportInfoMenu(airports, graph, airlines, airport);
+        return;
+    } catch (std::out_of_range const &e) {
+        std::cout << "Invalid choice. Please enter a number from 1 to 5." << std::endl;
+        std::cout << "Redirecting..." << std::endl;
+        for (int counter = 0; counter < 5; counter++) {
+            std::cout << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        }
+        displayAirportInfoMenu(airports, graph, airlines, airport);
+        return;
+    }
+
+    if (choice17 < 1 || choice17 > 5) {
+        std::cout << "Invalid choice. Please enter a number from 1 to 5." << std::endl;
+        std::cout << "Redirecting..." << std::endl;
+        for (int counter = 0; counter < 5; counter++) {
+            std::cout << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        }
+        displayAirportInfoMenu(airports, graph, airlines, airport);
+        return;
+    }
+
     switch (choice17) {
         case 1:
             displayAirportID(airports, graph, airport, airlines);
@@ -79,14 +118,7 @@ void Menu::displayAirportInfoMenu(const std::unordered_map<std::string, Airport>
             displayMainMenu(airports, graph, airlines);
             break;
         default:
-            std::cout << "Invalid choice. Please try again." << std::endl;
-            std::cout << "Redirecting..." << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(2));
-            for (int counter = 0; counter < 6; counter++) {
-                std::cout << std::endl;
-                std::this_thread::sleep_for(std::chrono::milliseconds(150));
-            }
-            displayAirportInfoMenu(airports, graph, airlines, airport);
+            // This case should never be reached due to previous checks
             break;
     }
 }
@@ -160,7 +192,7 @@ void Menu::displayBestFlightByCityMenu(const std::unordered_map<std::string, Air
 
     std::vector<std::string> result = graph.getShortestPathAmongMultipleAirports(source_airports, target_airports, airlinePrefs);
 
-    std::cout << "Result size: " << result.size() << std::endl;
+    std::cout << "\nResult size: " << result.size() << std::endl;
 
     if (!result.empty()) {
         std::cout << "Shortest path: ";
